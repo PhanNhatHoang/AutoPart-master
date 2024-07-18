@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Auto Hub</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="~/Content/mdb-favicon.ico" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+    <!-- MDB -->
+    <link rel="stylesheet" href="~/Content/mdb.min.css" />
+    <link rel="stylesheet" href="~/Content/PagedList.css">
+    <link rel="stylesheet" href="~/Content/jquery.dataTables.css" />
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background-color: #e6e6e6;
+            min-height: 100vh;
+        }
+       </style>
+</head>
+
+<body>
+    <!-- Start your project here-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-inverse sticky-top">
+        <!-- Container wrapper -->
+        <div class="container">
+            <!-- Toggle button -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-mdb-toggle="collapse"
+                    data-mdb-target="#navbarLeftAlignExample"
+                    aria-controls="navbarLeftAlignExample"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Collapsible wrapper -->
+            <div class="collapse navbar-collapse" id="navbarLeftAlignExample">
+                <!-- Left links -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/Home/Index">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="/Home/About">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Home/Contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Shopping/Index">Products</a>
+                    </li>
+                    @if (User.IsInRole("user"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/OrderManaging/Index">Order Management</a>
+                        </li>
+                    }
+                </ul>
+                @*login partial*@
+            <div style="color: white" class="d-flex">
+                @if (User.IsInRole("user"))
+                {
+                    <a href="/Ordering/YourCart" class="text-light">
+                        <i style='font-size:22px' class='fas me-2'>&#xf218;</i>
+                    </a>
+                }
+                @using Microsoft.AspNet.Identity
+                @if (Request.IsAuthenticated)
+                {
+                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", style = "color: white" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <ul class="nav navbar-nav navbar-right text-light">
+                            <li>
+                                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "text-white me-2" })
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()" style="color: white">Log off</a></li>
+                        </ul>
+                    }
+                }
+                else
+                {
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "text-white me-2" })</li>
+                        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "text-white" })</li>
+                    </ul>
+                }
+            </div>
+                <!-- Left links -->
+            </div>
+            <!-- Collapsible wrapper -->
+        </div>
+        <!-- Container wrapper -->
+    </nav>
+    @RenderSection("Carousel", required: false)
+    @RenderBody()
+    <!-- End your project here-->
+    <!-- MDB -->
+    <script type="text/javascript" src="~/Scripts/mdb.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+    <script src="~/Scripts/jquery.dataTables.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

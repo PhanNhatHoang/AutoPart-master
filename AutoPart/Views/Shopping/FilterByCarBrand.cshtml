@@ -1,0 +1,77 @@
+﻿@*@model IEnumerable<AutoPart.Models.Part>*@
+@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<AutoPart.Models.Part>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/LayoutUser2.cshtml";
+}
+
+<style>
+    .item {
+        transition: transform 0.5s;
+    }
+
+        .item:hover {
+            transform: scale(1.03);
+            filter: sepia(25%);
+        }
+</style>
+
+@section Carousel{
+    @Html.Partial("_PartialCarousel")
+}
+
+<div class="container">
+    @Html.Partial("_PartialSearchBarList")
+    <input value="@ViewBag.CarBrandId" type="hidden" />
+    <div class="d-flex align-items-center py-2 my-2 justify-content-between">
+        <h2>Parts For @ViewBag.CarBrand Car</h2>
+        <div>
+            <div class="dropdown">
+                <a class="btn btn-success dropdown-toggle"
+                   href="#"
+                   role="button"
+                   id="dropdownMenuLink"
+                   data-mdb-toggle="dropdown"
+                   aria-expanded="false">
+                    Arrange By
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li><a class="dropdown-item" href="/Shopping/ArrangeByCarBrand?arr=name&carBrandId=@ViewBag.CarBrandId">Name</a></li>
+                    <li><a class="dropdown-item" href="/Shopping/ArrangeByCarBrand?arr=price&carBrandId=@ViewBag.CarBrandId">Price From Low To High</a></li>
+                    <li><a class="dropdown-item" href="/Shopping/ArrangeByCarBrand?arr=priceDescend&carBrandId=@ViewBag.CarBrandId">Price From High To Low</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6 item mb-3 d-flex justify-content-center">
+                <div class="card" style="width: 300px; width: 300px">
+                    <div class="bg-image hover-zoom ripple" data-mdb-ripple-color="light">
+                        <img src=@item.ImageSub2 style="width: 100%;height: 190px" />
+                        <a href="#!">
+                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                        </a>
+                    </div>
+                    <div class="card-body justify-content-center">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text"><span class="fw-bold">Used For:</span> @item.CarName</p>
+                        <h4>$@item.UnitPrice</h4>
+                        <a href="/Shopping/Details?id=@item.Id&supplier=@item.Supplier.Name&category=@item.Category.Name&manufacturer=@item.Manufacturer.Name&carBrand=@item.CarBrand.CarBrandName"
+                           type="submit"
+                           class="btn btn-dark mb-0">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="d-flex justify-content-center">
+        @Html.PagedListPager(Model, page => Url.Action("FilterByCarBrand", new { page, id = ViewBag.CarBrandId }), new PagedListRenderOptions { LinkToFirstPageFormat = "<< First  ", LinkToPreviousPageFormat = "Previous  ", LinkToNextPageFormat = "Next", LinkToLastPageFormat = " Last>>" })
+    </div>
+</div>
